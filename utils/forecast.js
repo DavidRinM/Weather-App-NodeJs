@@ -5,16 +5,16 @@ const forecast = (longitude, latitude, callback) => {
     latitude
   )},${encodeURIComponent(longitude)}?units=si&lang=es`;
 
-  request({ url: url, json: true }, (error, response) => {
+  request({ url, json: true }, (error, { body }) => {
     if (error) {
       callback("Unable to connect to forecast services", undefined); //No internet
-    } else if (response.body.error) {
+    } else if (body.error) {
       callback("Location not found", undefined);
     } else {
       const data = {
-        temperature: response.body.currently.temperature,
-        precipitation: response.body.currently.precipProbability,
-        dailyWeather: response.body.daily.data[0].summary
+        temperature: body.currently.temperature,
+        precipitation: body.currently.precipProbability,
+        dailyWeather: body.daily.data[0].summary
       };
 
       callback(
